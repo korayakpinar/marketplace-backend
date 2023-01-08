@@ -13,9 +13,6 @@ app.use("/getProfilePhoto", getProfilePhotoRoute)
 const getUserProfileRoute = require("./routes/getProfile")
 app.use("/getProfile", getUserProfileRoute)
 
-const putNameSurnameRoute = require("./routes/putNameSurname")
-app.use("/putNameSurname", putNameSurnameRoute)
-
 const putProfilePhotoRoute = require("./routes/putProfilePhoto")
 app.use("/putProfilePhoto", putProfilePhotoRoute)
 

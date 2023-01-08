@@ -21,7 +21,7 @@ router.post("/", upload.single("file"), (req, res) => {
   file = req.file
   const fileName = uuidv4()
 
-  if (file.mimetype != "image/png") {
+  if (!file) {
     return res.status(400).send("File must be a PNG, JPEG or JPG file")
   } else {
     const image = {
@@ -32,6 +32,7 @@ router.post("/", upload.single("file"), (req, res) => {
       updatedAt: Date.now(),
     }
     withDB(async (db) => {
+      console.log(image.contentType)
       const response = await db.collection("images").findOneAndUpdate(
         {
           ownerAccount: data.walletAccount,
@@ -49,7 +50,22 @@ router.post("/", upload.single("file"), (req, res) => {
         }
       )
       if (response) {
-        res.send({ message: "INFO : Profile photo saved successfully" })
+        await db
+          .collection("accounts")
+          .updateOne(
+            {
+              walletAccount: data.walletAccount,
+            },
+            {
+              $set: {
+                updatedAt: image.updatedAt,
+                profilePhoto: image.filename,
+              },
+            }
+          )
+          .then(() => {
+            res.send({ message: "INFO : Profile photo saved successfully" })
+          })
       } else {
         res.status(500).send({ message: " ERROR : Profile photo can't upload" })
       }

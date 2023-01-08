@@ -14,8 +14,7 @@ router.get("/:walletAddress", (req, res) => {
   withDB(async (db) => {
     var response
 
-    if (data.walletAddress.length <= 16) {
-      console.log("bu bir username")
+    if (data.walletAddress.length <= 4) {
       response = await db.collection("accounts").findOne({
         username: data.walletAddress,
       })

@@ -11,7 +11,6 @@ router.get("/:walletAccount", (req, res) => {
       ownerAccount: data.walletAccount,
     })
     if (response) {
-      res.set("Content-Type", response.contentType)
       res.send(response.data)
     } else {
       res.status(500).send({ message: "ERROR : User photo can't view" })
